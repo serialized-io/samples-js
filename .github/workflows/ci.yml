@@ -1,0 +1,19 @@
+name: Build & Test
+on: [ push ]
+jobs:
+  todo-application:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./todo-application-js
+    strategy:
+      matrix:
+        node-version: [ 10.x, 12.x ]
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          version: ${{ matrix.node-version }}
+      - run: npm install
+        working-directory: ${{env.workingDirectory}}
+      - run: npm run test
+        working-directory: ${{env.workingDirectory}}

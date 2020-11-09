@@ -1,0 +1,20 @@
+{
+  "name": "todos",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node -r ./src/app.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@serialized/serialized-client": "^3.10.0",
+    "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "hbs": "^4.1.1",
+    "uuid": "^8.0.0"
+  },
+  "devDependencies": {
+    "jest": "^26.4.1"
+  }
+}

@@ -1,0 +1,96 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.8/uuid.js"></script>
+
+<hr/>
+
+<div id="todolist" style="margin-top: 30px;">
+  <h3>List name: {{title}}</h3>
+
+  {{#if completed}}
+    {{#each todos}}
+      <div>
+        <del>{{text}}</del>
+      </div>
+    {{/each}}
+  {{else}}
+
+    <div id="todos">
+      {{#each todos}}
+        <div>
+          <input class="todo" type="checkbox" id="{{todoId}}" {{checked}} value="{{todoId}}"/> {{#if checked}}
+          <del><label id="label-{{todoId}}" for="{{todoId}}">{{text}}</label></del>
+        {{else}}
+          <label id="label-{{todoId}}" for="{{todoId}}">{{text}}</label> {{/if}}
+        </div>
+      {{else}}
+      <span id="empty-list">
+        <p>No todos, yet.</p>
+      </span>
+      {{/each}}
+    </div>
+
+    <h3>Add a ToDo to the list</h3>
+
+    <form id="create-todo-form">
+      <div><label for="todo-text">Enter a new ToDo: </label>
+        <input id="todo-text" type="text"/>
+        <input type="hidden" id="list-id" value="{{listId}}"/>
+        <button type="submit" id="create-todo">Submit</button>
+        <span id="status"></span>
+      </div>
+      <div>
+        <span style="color: red" id="error-message"></span>
+      </div>
+    </form>
+  {{/if}}
+
+  <div>
+    <p>
+      <a href="/">Back</a>
+    </p>
+  </div>
+
+</div>
+
+<script>
+  $('.todo').change(function (e) {
+    var todoId = e.target.id;
+    var listId = $('#list-id').val();
+    e.target.disabled = "disabled";
+    $.ajax('/commands/complete-todo', {
+      type: 'POST',
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({todoId: todoId, listId: listId})
+    }).done(function () {
+      e.target.disabled = "";
+      $('#label-' + todoId).wrap('<del></del>')
+    }).fail(function () {
+      console.log('error')
+    });
+  });
+
+  $('#create-todo-form').submit(function (e) {
+    e.preventDefault();
+    var listId = $('#list-id').val();
+    var todoId = uuid();
+    var todoText = $("#todo-text").val();
+    $('#error-message').text('');
+    $('#todo-text').val('');
+    $.ajax('/commands/create-todo', {
+      type: 'POST',
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify({text: todoText, todoId: todoId, listId: listId})
+    }).done(function () {
+      var todoInput = '<input class="todo" type="checkbox" id="' + todoId + '" value="' + todoId + '" />';
+      var todoLabel = '<label id="label-' + todoId + '" for="' + todoId + '">&nbsp;' + todoText + '</label>';
+      var todoDiv = '<div>' + todoInput + todoLabel + '</div>';
+      $("#todos").append(todoDiv);
+      $('#empty-list').html('');
+    }).fail(function (response) {
+      console.log(response.responseJSON.error);
+      $('#error-message').text('Error:' + response.responseJSON.error);
+    });
+
+  });
+
+</script>
