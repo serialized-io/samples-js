@@ -1,0 +1,4 @@
+node_modules
+nodemon.json
+npm-debug.log
+.idea
