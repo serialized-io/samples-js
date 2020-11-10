@@ -22,7 +22,7 @@ SERIALIZED_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY> \
 npm run start
 ```
 
-The application should now be accessible at [http://localhost:3000](http://localhost:3000)
+The application should now be accessible at [http://localhost:8888](http://localhost:8888)
 
 ### Deploy to Heroku
 
