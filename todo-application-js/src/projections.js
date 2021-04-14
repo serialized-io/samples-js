@@ -3,7 +3,7 @@ const chalk = require('chalk')
 class ProjectionsClient {
 
   constructor(serializedClient) {
-    this.serializedClient = serializedClient
+    this.client = serializedClient.projectionsClient()
   }
 
   async updateProjections() {
@@ -29,7 +29,7 @@ class ProjectionsClient {
           },
         ]
       };
-      await this.serializedClient.projectionsClient().createOrUpdateDefinition(request)
+      await this.client.createOrUpdateDefinition(request)
     } catch (e) {
       console.log('Error response: ', e);
     }
@@ -38,7 +38,7 @@ class ProjectionsClient {
   async createListsProjection() {
     try {
       console.log(`Updating projection: ${chalk.green.bold('lists')}`);
-      await this.serializedClient.projectionsClient().createOrUpdateDefinition({
+      await this.client.createOrUpdateDefinition({
         projectionName: 'lists',
         feedName: 'todo-list',
         handlers: [
@@ -79,18 +79,18 @@ class ProjectionsClient {
   }
 
   async findListProjections() {
-    return (await this.serializedClient.projectionsClient().listSingleProjections({projectionName: 'lists'})).projections;
+    return (await this.client.listSingleProjections({projectionName: 'lists'})).projections;
   }
 
   async findListStats() {
-    return await this.serializedClient.projectionsClient().getAggregatedProjection({projectionName: 'list-stats'})
+    return await this.client.getAggregatedProjection({projectionName: 'list-stats'})
   }
 
   async findListProjection(listId) {
-    return await this.serializedClient.projectionsClient().getSingleProjection({
+    return await this.client.getSingleProjection({
       projectionName: 'lists',
       projectionId: listId
-    })
+    });
   }
 
 }

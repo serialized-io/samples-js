@@ -20,7 +20,7 @@ const app = express();
 
 app.use(clientErrorHandler);
 app.use(errorHandler);
-app.use(express.static(path.join(__dirname, '../', 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -51,7 +51,7 @@ app.get('/stats', async function (req, res) {
 });
 
 
-app.get('/:listId', async function (req, res) {
+app.get('/lists/:listId', async function (req, res) {
   const listId = req.params.listId;
   try {
     let view = TodoListView.fromProjection((await projectionsClient.findListProjection(listId)).data);
