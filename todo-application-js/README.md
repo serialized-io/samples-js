@@ -28,7 +28,7 @@ The application should now be accessible at [http://localhost:8888](http://local
 
 You can easily deploy this application to your own Heroku account if you want to try it out some more.
 
-You need a Heroku account, then it's as simple as running the following:
+You need a Heroku account, then run the following from the root of this repository:
 
 ```bash
 $ heroku login
@@ -36,5 +36,6 @@ $ heroku create
 $ heroku git:remote -a '<YOUR_APP_NAME>'
 $ heroku config:set SERIALIZED_ACCESS_KEY=<YOUR_ACCESS_KEY>
 $ heroku config:set SERIALIZED_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY>
+$ git subtree push --prefix todo-application-js  heroku main
 $ heroku open
 ```
