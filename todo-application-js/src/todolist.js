@@ -1,3 +1,5 @@
+const {DomainEvent} = require("@serialized/serialized-client");
+
 class TodoListState {
 
   constructor({todoListId, name, todos = [], completedTodos = [], completed = false}) {
@@ -85,21 +87,21 @@ class TodoList {
   createList(listId, name) {
     if (!listId || listId.length !== 36) throw "Invalid listId";
     if (!name || name.length < 5) throw "Name must have length >= 5";
-    return [new TodoListCreated(listId, name)];
+    return [DomainEvent.create(new TodoListCreated(listId, name))];
   }
 
   addTodo(todoId, text) {
     if (this.completed) throw "List cannot be changed since it has been completed";
     if (text === undefined || text.length < 5) throw "Text must have length > 4";
-    return [new TodoAdded(this.todoListId, todoId, text)];
+    return [DomainEvent.create(new TodoAdded(this.todoListId, todoId, text))];
   }
 
   completeTodo(todoId) {
     if (!this.isTodoCompleted(todoId)) {
       let events = [];
-      events.push(new TodoCompleted(this.todoListId, todoId));
+      events.push(DomainEvent.create(new TodoCompleted(this.todoListId, todoId)));
       if (this.todosLeft === 1) {
-        events.push([new TodoListCompleted(this.todoListId)]);
+        events.push([DomainEvent.create(new TodoListCompleted(this.todoListId))]);
       }
       return events;
     } else {

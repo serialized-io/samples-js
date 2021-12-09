@@ -1,13 +1,13 @@
 {
   "name": "todos",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node -r ./src/app.js",
     "test": "jest"
   },
   "dependencies": {
-    "@serialized/serialized-client": "^3.12.2",
+    "@serialized/serialized-client": "^4.0.0",
     "chalk": "^4.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

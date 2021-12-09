@@ -1,5 +1,12 @@
-const {StateLoader, EventEnvelope} = require('@serialized/serialized-client')
-const {TodoAdded, TodoCompleted, TodoListState, TodoList, TodoListCompleted, TodoListCreated} = require("../src/todolist");
+const {StateLoader, DomainEvent} = require('@serialized/serialized-client')
+const {
+  TodoAdded,
+  TodoCompleted,
+  TodoListState,
+  TodoList,
+  TodoListCompleted,
+  TodoListCreated
+} = require("../src/todolist");
 const uuidv4 = require('uuid').v4;
 
 describe('TodoList', function () {
@@ -16,7 +23,7 @@ describe('TodoList', function () {
     ];
 
     let stateLoader = new StateLoader(TodoList);
-    let state = stateLoader.loadState(events.map(EventEnvelope.fromDomainEvent));
+    let state = stateLoader.loadState(events.map((e) => DomainEvent.create(e)));
     let todoList = new TodoList(state);
 
     expect(() => todoList.addTodo(uuidv4(), 'Too late to add more todos..')).toThrowError();
