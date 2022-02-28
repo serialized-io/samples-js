@@ -15,8 +15,8 @@ Clone this repository and make sure you can run the application.
 npm install
 
 # Start the server
-SERIALIZED_ACCESS_KEY=<YOUR_ACCESS_KEY> \
-SERIALIZED_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY> \
+export SERIALIZED_ACCESS_KEY=<YOUR_ACCESS_KEY> \
+export SERIALIZED_SECRET_ACCESS_KEY=<YOUR_SECRET_ACCESS_KEY> \
 npm run start
 ```
 
