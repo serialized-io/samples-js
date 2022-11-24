@@ -84,6 +84,10 @@ class TodoList {
     this.completed = state.completed;
   }
 
+  get initialState() {
+    return () => new TodoListState({});
+  }
+
   createList(listId, name) {
     if (!listId || listId.length !== 36) throw "Invalid listId";
     if (!name || name.length < 5) throw "Name must have length >= 5";
