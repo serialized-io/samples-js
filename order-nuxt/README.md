@@ -3,7 +3,7 @@
 ## Install dependencies
 
 ```
-yarn i
+yarn install
 ```
 
 ## Register for a Serialized Account
