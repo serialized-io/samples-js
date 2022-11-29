@@ -6,7 +6,7 @@ const {data: data} = await useFetch('/api/orders/ready-to-ship')
 let orders = ref(data.value?.orders)
 
 const shipOrder = async (orderId: string) => {
-  await useFetch('/api/orders/ship-order', {
+  await useFetch('/api/commands/ship-order', {
     method: 'POST',
     body: {orderId}
   })
