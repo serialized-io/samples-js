@@ -24,7 +24,7 @@ export interface OrderEvent {
   readonly paidAt?: number
 }
 
-export interface Order {
+export interface CompleteOrderProjection {
   readonly orderId: string
   readonly customerId: string
   readonly sku: string
@@ -33,7 +33,7 @@ export interface Order {
   readonly canceledAt: number
 }
 
-export interface ShippableOrder {
+export interface ShippableOrderProjection {
   readonly orderId: string
   readonly customerId: string
   readonly orderAmount: number
