@@ -11,6 +11,6 @@
     "nuxt": "3.0.0"
   },
   "dependencies": {
-    "@serialized/serialized-client": "^5.0.0"
+    "@serialized/serialized-client": "^7.2.0"
   }
 }
