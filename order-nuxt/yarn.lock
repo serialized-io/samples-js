@@ -566,10 +566,10 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
-"@serialized/serialized-client@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@serialized/serialized-client/-/serialized-client-5.0.0.tgz#bd994fd4bf5fb524a5fb8db16f5cf2b2c6643d55"
-  integrity sha512-vGrGj2+m+pspsgNu5Rt45Upq/QcDyNx+ELHXPtvv6LDumTra6yeiyq7/OKYhHO66a1eBqem2daReR67l5GK0qQ==
+"@serialized/serialized-client@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@serialized/serialized-client/-/serialized-client-7.2.0.tgz#52ad95e7a610c197b82e8536b7dbad9fdde55003"
+  integrity sha512-ABzGqi6LVmXcf2pxW8uR63t95Oib+ljI3RcvP6oS5LVV2lLYGD7I7PpBWqkxpLRDIO1OAixfVq3XfG8v2xX9Mw==
   dependencies:
     "@types/uuid" "8.3.0"
     axios "0.26.1"
