@@ -5,8 +5,8 @@ export default defineEventHandler(async (request) => {
   const {orderId} = await readBody(request)
   const client = request.context.serialized.aggregateClient(Order);
   await client.update({aggregateId: orderId}, (order: Order) => {
-    return order.ship(new Date().getTime())
+    return order.cancel(new Date().getTime())
   })
-  console.log({message: 'Order shipped', orderId})
+  console.info({message: 'Order canceled', orderId})
   return {}
 })

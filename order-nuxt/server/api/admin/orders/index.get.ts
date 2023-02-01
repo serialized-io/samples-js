@@ -1,14 +1,16 @@
 import {defineEventHandler} from "h3";
 import {CompleteOrderProjection, Projection} from "~/server/utils/types";
+import {dollarAmount, timestampToDatetime} from "~/server/utils/helpers";
 
 export default defineEventHandler(async (event) => {
   const projectionsClient = event.context.serialized.projectionsClient();
   const response = await projectionsClient.listSingleProjections({projectionName: 'orders-by-id'});
   const orders = response.projections.map((projection: Projection<CompleteOrderProjection>) => {
     return {
-      orderId: projection.data.orderId,
-      orderAmount: projection.data.orderAmount
+      ...projection.data,
+      orderAmountFormatted: dollarAmount(projection.data.orderAmount),
+      placedAtDate: timestampToDatetime(projection.data.placedAt)
     }
-  })
+  }).filter((order: CompleteOrderProjection) => order.status !== 'CANCELED')
   return {orders}
 })

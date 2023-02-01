@@ -11,7 +11,7 @@ export class OrderStateBuilder {
 
   @EventHandler(OrderPlaced)
   handleOrderPlaced(state: OrderState, event: DomainEvent<OrderPlaced>): OrderState {
-    return {orderId: event.data.orderId};
+    return {orderId: event.data.orderId, customerId: event.data.customerId};
   }
 
   @EventHandler(OrderShipped)
