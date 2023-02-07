@@ -15,7 +15,6 @@ export default defineEventHandler(async (event) => {
       orderAmountFormatted: dollarAmount(order.orderAmount),
       placedAtDate: timestampToDatetime(order.placedAt)
     }));
-    console.info({orders})
     return {orders}
   } catch (e) {
     console.error(e)

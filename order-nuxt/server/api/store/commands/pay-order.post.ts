@@ -8,6 +8,6 @@ export default defineEventHandler(async (request) => {
   await client.update({aggregateId: orderId}, (order: Order) => {
     return order.payFully({orderId, paidAt})
   })
-  console.info({message: 'Order paid fully', orderId})
+  console.info({message: 'Order fully paid', orderId})
   return {}
 })
