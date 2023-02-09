@@ -1,9 +1,8 @@
-export class OrderPlaced {
+export class OrderFullyPaid {
   constructor(readonly orderId: string,
               readonly customerId: string,
-              readonly sku: string,
               readonly orderAmount: number,
-              readonly placedAt: number) {
+              readonly paidAt: number) {
   };
 }
 
