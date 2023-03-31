@@ -14,16 +14,6 @@ export interface Feed<D> {
   }[]
 }
 
-export interface OrderEvent {
-  readonly orderId: string
-  readonly customerId: string
-  readonly sku: string
-  readonly orderAmount: number
-  readonly placedAt: number
-  readonly canceledAt?: number
-  readonly paidAt?: number
-}
-
 export interface CompleteOrderProjection {
   readonly orderId: string
   readonly customerId: string

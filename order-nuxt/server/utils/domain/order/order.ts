@@ -1,12 +1,12 @@
-import {Aggregate, DomainEvent} from "@serialized/serialized-client";
-import {OrderStateBuilder} from "~/server/utils/domain/order/order-state-builder";
 import {OrderState} from "~/server/utils/domain/order/order-state";
-import {OrderPlaced} from "~/server/utils/domain/order/order-placed";
-import {OrderShipped} from "~/server/utils/domain/order/order-shipped";
 import {PayOrderFully, PlaceOrder} from "~/server/utils/domain/order/commands";
-import {PaymentReceived} from "./payment-received";
-import {OrderFullyPaid} from "./order-fully-paid";
-import {OrderCanceled} from "~/server/utils/domain/order/order-canceled";
+import {
+  OrderCanceled,
+  OrderFullyPaid,
+  OrderPlaced,
+  OrderShipped,
+  PaymentReceived
+} from "~/server/utils/domain/order/events";
 
 export enum OrderStatus {
   PLACED = 'PLACED',
@@ -15,15 +15,23 @@ export enum OrderStatus {
   CANCELED = 'CANCELED'
 }
 
-@Aggregate('order', OrderStateBuilder)
 export class Order {
 
   constructor(private readonly state: OrderState) {
   }
 
-  place(command: PlaceOrder): DomainEvent<OrderPlaced>[] {
+  place(command: PlaceOrder): [OrderPlaced] | [] {
     if (!this.state.status) {
-      return [DomainEvent.create(new OrderPlaced(command.orderId, command.customerId, command.sku, command.orderAmount, command.placedAt))];
+      return [{
+        eventType: 'OrderPlaced',
+        data: {
+          orderId: command.orderId,
+          customerId: command.customerId,
+          sku: command.sku,
+          orderAmount: command.orderAmount,
+          placedAt: command.placedAt
+        }
+      }];
     } else if (this.state.status === OrderStatus.PLACED) {
       return []
     } else {
@@ -31,11 +39,28 @@ export class Order {
     }
   }
 
-  payFully(command: PayOrderFully): DomainEvent<PaymentReceived | OrderFullyPaid>[] {
+  payFully(command: PayOrderFully): [PaymentReceived, OrderFullyPaid] | [] {
     if (this.state.status === OrderStatus.PLACED || this.state.status === OrderStatus.SHIPPED) {
       return [
-        DomainEvent.create(new PaymentReceived(this.state.orderId!, this.state.customerId!, this.state.orderAmount!, command.paidAt, command.paidAt)),
-        DomainEvent.create(new OrderFullyPaid(this.state.orderId!, this.state.customerId!, this.state.orderAmount!, command.paidAt))
+        {
+          eventType: 'PaymentReceived',
+          data: {
+            orderId: this.state.orderId!,
+            customerId: this.state.customerId!,
+            amountPaid: this.state.orderAmount!,
+            paidAt: command.paidAt,
+            receivedAt: command.paidAt
+          }
+        },
+        {
+          eventType: 'OrderFullyPaid',
+          data: {
+            orderId: this.state.orderId!,
+            customerId: this.state.customerId!,
+            orderAmount: this.state.orderAmount!,
+            paidAt: command.paidAt
+          }
+        }
       ];
     } else if (this.state.status === OrderStatus.FULLY_PAID) {
       return []
@@ -44,9 +69,15 @@ export class Order {
     }
   }
 
-  ship(shippedAt: number): DomainEvent<OrderShipped>[] {
+  ship(shippedAt: number): [OrderShipped] | [] {
     if (this.state.status === OrderStatus.PLACED || this.state.status === OrderStatus.FULLY_PAID) {
-      return [DomainEvent.create(new OrderShipped(this.state.orderId!, shippedAt))];
+      return [{
+        eventType: 'OrderShipped',
+        data: {
+          orderId: this.state.orderId!,
+          shippedAt: shippedAt
+        }
+      }];
     } else if (this.state.status === OrderStatus.SHIPPED) {
       return []
     } else {
@@ -54,9 +85,15 @@ export class Order {
     }
   }
 
-  cancel(canceledAt: number) {
+  cancel(canceledAt: number): [OrderCanceled] | [] {
     if (this.state.status === OrderStatus.PLACED) {
-      return [DomainEvent.create(new OrderCanceled(this.state.orderId!, canceledAt))];
+      return [{
+        eventType: 'OrderCanceled',
+        data: {
+          orderId: this.state.orderId!,
+          canceledAt: canceledAt
+        }
+      }]
     } else if (this.state.status === OrderStatus.CANCELED) {
       return []
     } else {

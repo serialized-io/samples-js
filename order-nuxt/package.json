@@ -14,6 +14,6 @@
     "@headlessui/vue": "^1.7.8",
     "@heroicons/vue": "^2.0.14",
     "@nuxtjs/tailwindcss": "^6.2.0",
-    "@serialized/serialized-client": "^7.2.0"
+    "@serialized/serialized-client": "^8.2.0"
   }
 }
