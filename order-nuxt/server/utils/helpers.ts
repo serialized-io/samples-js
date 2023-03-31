@@ -1,3 +1,9 @@
+import {SerializedInstance} from "@serialized/serialized-client";
+import {OrderState} from "~/server/utils/domain/order/order-state";
+import {Order} from "~/server/utils/domain/order/order";
+import {orderStateBuilder} from "~/server/utils/domain/order/order-state-builder";
+import exp from "constants";
+
 export const dollarAmount = (amount: number) => {
   return `$${(amount / 100).toFixed(2)}`
 }
@@ -44,4 +50,10 @@ export const productDatabase = {
   getProduct(sku: any) {
     return this.listAll().find((product) => product.sku === sku)
   }
+}
+
+export const createOrderClient = (serialized: SerializedInstance) => {
+  return serialized.aggregateClient({
+    aggregateType: 'order',
+  }, orderStateBuilder, (state: OrderState) => new Order(state));
 }

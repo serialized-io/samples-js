@@ -1,4 +1,5 @@
 import {Serialized, SerializedInstance} from "@serialized/serialized-client";
+import {createOrderClient} from "~/server/utils/helpers";
 
 let serialized: SerializedInstance | undefined
 
@@ -9,4 +10,5 @@ export default defineEventHandler((event) => {
     serialized = Serialized.createInstance({accessKey, secretAccessKey});
   }
   event.context.serialized = serialized
+  event.context.orderClient = createOrderClient(serialized)
 })

@@ -12,7 +12,7 @@ export default defineEventHandler(async (request) => {
     const itemPrice = product.price
     const placedAt = new Date().getTime()
 
-    const client = request.context.serialized.aggregateClient(Order);
+    const client = request.context.orderClient;
     await client.create({aggregateId: orderId}, (order: Order) => {
       return order.place({orderId, customerId, sku, itemPrice, orderAmount, placedAt})
     })

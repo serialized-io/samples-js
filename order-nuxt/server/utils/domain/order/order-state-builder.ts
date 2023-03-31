@@ -1,46 +1,40 @@
-import {DefaultHandler, DomainEvent, EventHandler} from "@serialized/serialized-client";
-import {OrderPlaced} from "~/server/utils/domain/order/order-placed";
-import {OrderState} from "~/server/utils/domain/order/order-state";
-import {OrderShipped} from "~/server/utils/domain/order/order-shipped";
-import {OrderFullyPaid} from "~/server/utils/domain/order/order-fully-paid";
-import {OrderCanceled} from "~/server/utils/domain/order/order-canceled";
+import {StateBuilder} from "@serialized/serialized-client";
 import {OrderStatus} from "~/server/utils/domain/order/order";
+import {OrderState} from "~/server/utils/domain/order/order-state";
+import {OrderEvent} from "~/server/utils/domain/order/events";
 
-export class OrderStateBuilder {
-
-  get initialState() {
-    return () => ({})
-  }
-
-  @EventHandler(OrderPlaced)
-  handleOrderPlaced(state: OrderState, event: DomainEvent<OrderPlaced>): OrderState {
+export const orderStateBuilder: StateBuilder<OrderState, OrderEvent> = {
+  initialState: () => {
     return {
-      orderId: event.data.orderId,
-      customerId: event.data.customerId,
-      orderAmount: event.data.orderAmount,
+      orderId: '',
+      customerId: '',
+      status: undefined,
+      orderAmount: 0
+    }
+  },
+
+  applyOrderPlaced(state, event): OrderState {
+    return {
+      orderId: event.data!.orderId,
+      customerId: event.data!.customerId,
+      orderAmount: event.data!.orderAmount,
       status: OrderStatus.PLACED
     };
-  }
+  },
 
-  @EventHandler(OrderFullyPaid)
-  handleOrderFullyPaid(state: OrderState, _event: DomainEvent<OrderFullyPaid>): OrderState {
+  applyOrderFullyPaid(state: OrderState, _event): OrderState {
     return {...state, status: OrderStatus.FULLY_PAID};
-  }
+  },
 
-  @EventHandler(OrderCanceled)
-  handleOrderCanceled(state: OrderState, _event: DomainEvent<OrderCanceled>): OrderState {
+  applyOrderCanceled(state: OrderState, _event): OrderState {
     return {...state, status: OrderStatus.CANCELED};
-  }
+  },
 
-  @EventHandler(OrderShipped)
-  handleOrderShipped(state: OrderState, _event: DomainEvent<OrderShipped>): OrderState {
+  applyOrderShipped(state: OrderState, _event): OrderState {
+    return {...state, status: OrderStatus.SHIPPED};
+  },
+
+  applyPaymentReceived(state: OrderState, _event): OrderState {
     return {...state, status: OrderStatus.SHIPPED};
   }
-
-  @DefaultHandler()
-  handle(state: OrderState, event: DomainEvent<any>): OrderState {
-    console.log('Default handler called for', event.eventType)
-    return state
-  }
-
 }
