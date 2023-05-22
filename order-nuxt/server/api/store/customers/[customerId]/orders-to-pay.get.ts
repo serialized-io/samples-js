@@ -1,6 +1,7 @@
 import {defineEventHandler} from "h3";
 import {OrdersByCustomerProjection} from "~/server/utils/types";
 import {dollarAmount, timestampToDatetime} from "~/server/utils/helpers";
+import {isProjectionNotFound} from "@serialized/serialized-client/dist/error";
 
 export default defineEventHandler(async (event) => {
   const projectionsClient = event.context.serialized.projectionsClient();
@@ -17,6 +18,9 @@ export default defineEventHandler(async (event) => {
     })).filter((order) => order.status === 'PLACED');
     return {orders}
   } catch (e) {
+    if(isProjectionNotFound(e)) {
+      return {orders: []}
+    }
     console.error(e)
     return {orders: []}
   }
